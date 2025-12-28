@@ -10,6 +10,18 @@ def parse_input(path: str):
     return ranges, ids
 
 
+def merge_ranges(ranges):
+    ranges.sort()
+    merged = [ranges[0]]
+    for low, high in ranges [1:]:
+        prev_low, prev_high = merged[-1]
+        if low <= prev_high + 1:
+            merged[-1] = prev_low, max(prev_high, high)
+        else:
+            merged.append((low, high)r)
+    return merged
+
+
 def count_fresh(ranges, ids):
     cnt = 0
     for i in ids:
@@ -24,15 +36,16 @@ def part1(ranges, ids):
     return count_fresh(ranges, ids)
 
 
-def part2(ranges, ids):
-    # TODO: implement Part 2
-    return None
+def part2(ranges):
+    merged = merge_ranges(ranges)
+    total = sum(hi - lo + 1 for lo, hi in merged)
+    return total
 
 
 def main(path: str):
     ranges, ids = parse_input(path)
     print(f"Part 1: {part1(ranges, ids)}")
-    print(f"Part 2: {part2(ranges, ids)}")
+    print(f"Part 2: {part2(ranges)}")
 
 
 if __name__ == "__main__":
